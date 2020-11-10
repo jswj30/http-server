@@ -13,11 +13,11 @@ assignees: ''
 + To do : something
 
 ## TO DO
-[ ] job
+- [ ] job
 
 ## Estimated time
-[ ] 0.5 h
-[ ] 1 h
-[ ] 1.5 h
-[ ] 2 h
-[ ] 3 h
+- [ ] 0.5 h
+- [ ] 1 h
+- [ ] 1.5 h
+- [ ] 2 h
+- [ ] 3 h
