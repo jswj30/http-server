@@ -9,9 +9,9 @@ module.exports = {
       }
     }).then((result) => {
       if (result) {
-        res.status(200).send(result.data.email);
+        res.status(200).json(result.email);
       } else {
-        res.status(204).send("귀하의 email을 찾을 수 없습니다.");
+        res.status(404).send("귀하의 email을 찾을 수 없습니다.");
       }
     })
   }
