@@ -19,9 +19,11 @@
   "homepage": "https://github.com/JChan91/http-server#readme",
   "devDependencies": {
     "eslint": "^7.13.0",
+    "nodemon": "^2.0.6",
     "sequelize-cli": "^6.2.0"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^8.2.0",
