@@ -6,7 +6,7 @@ module.exports = {
     if (req.session.userid) {
       User.findOne({
         where: {
-          id: req.session.id
+          id: req.session.userid
         }
       })
         .then((result) => {
@@ -24,7 +24,7 @@ module.exports = {
       name, email, password, mobile
     }, {
       where: {
-        id: 1
+        id: req.session.userid
       }
     })
       .then((result) => {
@@ -37,8 +37,10 @@ module.exports = {
             mobile: mobile
           });
         } else {
-          res.status(404).send("err");
+          res.status(404).send("404 error");
         }
+      }).catch((err) => {
+        res.status(500).send(err);
       })
 
   }
