@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const port = 8000;
 const session = require('express-session');
+const cors = require('cors');
 
 // router
 const indexRouter = require('./routes/index');

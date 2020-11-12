@@ -1,4 +1,4 @@
 module.exports = {
-    searchEmail: require('../search/searchEmail'),
-    searchPassword: require('../search/searchPassword')
+    searchEmail: require('./searchEmail'),
+    searchPassword: require('./searchPassword')
 }

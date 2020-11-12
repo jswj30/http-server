@@ -7,4 +7,4 @@ module.exports = {
     important: require('./important'),
     signout: require('./signout'),
     remove: require('./remove')
-}
+};
