@@ -1,14 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const { controller } = require('../controller');
+const { indexController } = require('../controller');
 
-router.post('/signin', contorller.signin.post);
-router.post('/signup', constroller.signup.post);
-route.get('/mypage', contorller.mypage.get);
-route.post('/mypage', controller.mypage.post);
-route.get('/main', controller.main.get);
-route.post('/main', controller.main.post);
-route.get('/completed', controller.completed.get);
-route.get('/important', controller.important.get);
-route.post('/signout', controller.signout.post);
-route.get('/remove', controller.remove.get);
+router.post('/signin', indexController.signin.post);
+router.post('/signup', indexController.signup.post);
+router.get('/mypage', indexController.mypage.get);
+router.post('/mypage', indexController.mypage.post);
+router.get('/main', indexController.main.get);
+router.post('/main', indexController.main.post);
+router.get('/completed', indexController.completed.get);
+router.get('/important', indexController.important.get);
+router.post('/signout', indexController.signout.post);
+router.get('/remove', indexController.remove.get);
+
+module.exports = router;
