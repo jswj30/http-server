@@ -5,7 +5,7 @@ module.exports = {
     // 서버만으로 동작이 안되니까 임의로 지정
     User.destroy({
       where: {
-        id: 19,
+        id: req.session.userid,
         password: req.body.password
       }
     })
