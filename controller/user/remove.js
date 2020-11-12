@@ -1,10 +1,23 @@
 const { User } = require('../../models');
 
 module.exports = {
-    get: async (req, res) => {
-        // 서버만으로 동작이 안되니까 임의로 지정
-        await User.destroy({ where: { id: 78, password: req.body.password } });
+  post: (req, res) => {
+    // 서버만으로 동작이 안되니까 임의로 지정
+    User.destroy({
+      where: {
+        id: 19,
+        password: req.body.password
+      }
+    })
+      .then((result) => {
+        if (result) {
+          console.log(result);
+          res.status(200).send('없앴어여');
+        } else {
+          console.log(result);
+          res.status(404).send("비밀번호가 일치하지 않습니다.");
+        }
+      })
 
-        res.status(200).send('없앴어여');
-    }
+  }
 }
