@@ -13,6 +13,8 @@ module.exports = {
       } else {
         res.status(404).send("귀하의 email을 찾을 수 없습니다.");
       }
+    }).catch((err) => {
+      res.status(500).send(err);
     })
   }
 };

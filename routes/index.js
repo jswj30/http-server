@@ -11,6 +11,6 @@ router.post('/main', indexController.main.post);
 router.get('/completed', indexController.completed.get);
 router.get('/important', indexController.important.get);
 router.post('/signout', indexController.signout.post);
-router.get('/remove', indexController.remove.get);
+router.post('/remove', indexController.remove.post);
 
 module.exports = router;
