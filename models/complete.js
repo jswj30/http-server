@@ -5,7 +5,7 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Complete extends Model {
     static associate(models) {
-      Complete.belongsToMany(models.Todo, { through: 'JoinTable', foreignKey: 'id' });
+      Complete.belongsToMany(models.Todo, { through: 'JoinTable' });
     }
   };
   Complete.init({
