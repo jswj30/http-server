@@ -16,6 +16,10 @@ module.exports = {
             res.status(404).send("회원 정보를 찾을 수 없습니다.");
           }
         })
+        .catch((err) => {
+          res.status(500).send(err);
+        })
+
     }
   },
   post: (req, res) => {

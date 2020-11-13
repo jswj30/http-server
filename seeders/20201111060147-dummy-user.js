@@ -7,11 +7,11 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     let dummyUsers = [];
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 1; i < 3; i++) {
       let userData = {
         name: `User${i}`,
         email: `user${i}@gmail.com`,
-        password: `1231`,
+        password: `123`,
         mobile: `010-${i}234-1234`,
         createdAt: new Date(),
         updatedAt: new Date(),
