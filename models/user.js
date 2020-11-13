@@ -1,10 +1,13 @@
 'use strict';
 const crypto = require('crypto');
 const { Model } = require('sequelize');
+const jointable = require('./jointable');
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    static associate(models) { };
+    static associate(models) {
+      User.hasMany(models.Todo);
+    };
   };
 
   User.init({
@@ -15,20 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'User',
-    // hooks: {
-    //   beforeCreate: () => {
-    //     var shasum = crypto.createHmac('sha512', 'SpecialKeY');
-    //     shasum.update(data.password);
-    //     data.password = shasum.digest('hex');
-    //   },
-    //   beforeFind: () => {
-    //     if (data.where.password) {
-    //       var shasum = crypto.createHmac('sha512', 'SpecialKeY');
-    //       shasum.update(data.where.password);
-    //       data.where.password = shasum.digest('hex');
-    //     }
-    //   }
-    // }
   });
+
   return User;
 };
