@@ -1,24 +1,50 @@
 const { Todo, User, Complete, JoinTable } = require('../../models');
 
 module.exports = {
-    get: async (req, res) => {
-        let test = await User.findAll(
-            {
-                where: { id: 1 },
-                include: [{ model: Todo }]
-            });
+  get: async (req, res) => {
+    let result = [];
+    // 받아올 데이터는 Todo.content, Complete.complete, Complete.important
+    let todoList = await Todo.findAll({
+      where: { userId: 1 },
+      attributes: ['content'],
+      include: [
+        {
+          model: User,
+          attributes: ['name'],
+          where: { id: 1 }
+        },
+        {
+          model: Complete,
+          attributes: ['important', 'complete']
+        }
+      ]
+    });
 
-        let test2 = await Todo.findAll(
-            {
-                where: { userId: 1 },
-                include: [{ model: Complete }]
-            });
+    //get: (req, res) => {
+    // let userid = 2;
+    // if (userid) {
+    //   Todo.findAll({
+    //     where: { userId: userid },
+    //     attributes: ['id', 'startDate', 'content'],
+    //     include: [
+    //    {
+    //       model: User,
+    //       attributes: ['name'],
+    //       where: { id: userid }
+    //     }, {
+    //       model: Complete,
+    //       attributes: ['important', 'complete']
+    //     }]
+    //   })r
 
-        console.log(test2[0]);
-        //console.log(test[0].Todos);
-    },
-    post: (req, res) => {
-        console.log(req.body);
-        res.sendStatus(500);
-    }
+    console.log(todoList);
+    // for (let i = 0; i < todoList[0].dataValues.Todos.length; i++) {
+    //   console.log(todoList[0].dataValues.Todos[i].dataValues);
+    // }
+    //console.log(result);
+  },
+
+  post: async (req, res) => {
+
+  }
 }

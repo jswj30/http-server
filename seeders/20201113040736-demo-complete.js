@@ -1,29 +1,29 @@
 'use strict';
 
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    let dummyTodos = [];
+  up: async (queryInterface, Sequelize) => {
+    let dummyComplete = [];
+    let halfTrue = true;
 
     for (let i = 0; i < 10; i++) {
-      let userNum = 1;
-      if (i === 5) {
-        userNum = 2;
+      if (i === 4) {
+        halfTrue = false;
       }
-      let todoData = {
-        content: `${i}번 째 도전!`,
-        startDate: new Date(),
-        userId: `${userNum}`,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
 
-      dummyTodos.push(todoData);
+      let completeData = {
+        important: halfTrue,
+        complete: halfTrue,
+        deleteId: halfTrue,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+      dummyComplete.push(completeData);
     }
 
-    return queryInterface.bulkInsert('Todos', dummyTodos, {});
+    return queryInterface.bulkInsert('Completes', dummyComplete, {});
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Todos', null, {});
+    await queryInterface.bulkDelete('Completes', null, {});
   }
 };
