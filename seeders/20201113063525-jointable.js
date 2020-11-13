@@ -5,14 +5,9 @@ module.exports = {
     let dummyTodos = [];
 
     for (let i = 1; i < 10; i++) {
-      let userNum = 1;
-      if (i % 2 === 0) {
-        userNum = 2;
-      }
       let todoData = {
-        content: `${i}번 째 도전!`,
-        startDate: new Date(),
-        userId: `${userNum}`,
+        todoId: i,
+        completeId: i,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -20,10 +15,10 @@ module.exports = {
       dummyTodos.push(todoData);
     }
 
-    return queryInterface.bulkInsert('Todos', dummyTodos, {});
+    return queryInterface.bulkInsert('JoinTables', dummyTodos, {});
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Todos', null, {});
+    await queryInterface.bulkDelete('JoinTables', null, {});
   }
 };
