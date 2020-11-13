@@ -1,23 +1,21 @@
 const { Todo } = require('../../models');
 const { User } = require('../../models');
 const { Complete } = require('../../models');
-const { JoinTable } = require('../../models');
 const sesseion = require('express-session');
 
 module.exports = {
   get: (req, res) => {
-    let userid = 1;
-    if (userid) {
+    if (req.session.userid) {
       Todo.findAll({
         where: {
-          userId: userid
+          userId: req.session.userid
         },
         attributes: ['id', 'startDate', 'content'],
         include: [{
           model: User,
           attributes: ['name'],
           where: {
-            id: userid
+            id: req.session.userid
           }
         }, {
           model: Complete,

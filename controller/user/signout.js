@@ -1,6 +1,3 @@
-const { User } = require('../../models');
-const session = require('express-session');
-
 module.exports = {
   post: (req, res) => {
     if (req.session.userid) {
@@ -8,11 +5,11 @@ module.exports = {
         if (err) {
           console.log(err);
         } else {
-          res.redirect('/');
+          res.redirect('/signin');
         }
       })
     } else {
-      res.redirect('/');
+      res.redirect('/signin');
     }
   }
 };
