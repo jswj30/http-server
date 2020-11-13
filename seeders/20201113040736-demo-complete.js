@@ -1,29 +1,56 @@
 'use strict';
 
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    let dummyComplete = [];
-    let halfTrue = true;
+  up: (queryInterface, Sequelize) => {
+    let dummyTodos = [];
 
-    for (let i = 0; i < 10; i++) {
-      if (i === 4) {
-        halfTrue = false;
+    for (let i = 1; i < 10; i++) {
+      let test = false;
+      if (i % 2 === 0) {
+        test = true;
       }
 
-      let completeData = {
-        important: halfTrue,
-        complete: halfTrue,
-        deleteId: halfTrue,
+      let todoData = {
+        important: true,
+        complete: test,
+        deleteId: true,
         createdAt: new Date(),
-        updatedAt: new Date()
-      }
-      dummyComplete.push(completeData);
+        updatedAt: new Date(),
+      };
+
+      dummyTodos.push(todoData);
     }
 
-    return queryInterface.bulkInsert('Completes', dummyComplete, {});
+    return queryInterface.bulkInsert('Completes', dummyTodos, {});
   },
 
   down: async (queryInterface, Sequelize) => {
     await queryInterface.bulkDelete('Completes', null, {});
   }
 };
+
+
+// 'use strict';
+
+// module.exports = {
+//   up: async (queryInterface, Sequelize) => {
+//     /**
+//      * Add seed commands here.
+//      *
+//      * Example:
+//      * await queryInterface.bulkInsert('People', [{
+//      *   name: 'John Doe',
+//      *   isBetaMember: false
+//      * }], {});
+//     */
+//   },
+
+//   down: async (queryInterface, Sequelize) => {
+//     /**
+//      * Add commands to revert seed here.
+//      *
+//      * Example:
+//      * await queryInterface.bulkDelete('People', null, {});
+//      */
+//   }
+// };

@@ -5,8 +5,8 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class JoinTable extends Model {
     static associate(models) {
-      JoinTable.belongsTo(models.Todo, { foreignKey: 'todoId' });
-      JoinTable.belongsTo(models.Complete, { foreignKey: 'completeId' });
+      models.JoinTable.belongsTo(models.Todo, { foreignKey: 'todoId' });
+      models.JoinTable.belongsTo(models.Complete, { foreignKey: 'completeId' });
     }
   };
   JoinTable.init({
