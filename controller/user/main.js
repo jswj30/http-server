@@ -1,4 +1,4 @@
-const { Todo, User } = require('../../models');
+const { Todo, User, Complete, JoinTable } = require('../../models');
 
 module.exports = {
     get: async (req, res) => {
@@ -8,7 +8,14 @@ module.exports = {
                 include: [{ model: Todo }]
             });
 
-        console.log(test[0].Todos);
+        let test2 = await Todo.findAll(
+            {
+                where: { userId: 1 },
+                include: [{ model: Complete }]
+            });
+
+        console.log(test2[0]);
+        //console.log(test[0].Todos);
     },
     post: (req, res) => {
         console.log(req.body);
