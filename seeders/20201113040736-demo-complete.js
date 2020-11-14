@@ -13,7 +13,7 @@ module.exports = {
       let todoData = {
         important: true,
         complete: test,
-        deleteId: true,
+        deleteId: false,
         createdAt: new Date(),
         updatedAt: new Date(),
       };

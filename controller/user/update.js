@@ -1,23 +1,15 @@
 const { Complete, Todo } = require('../../models');
 
-// Complete.important, Complete.complete, Todo.content 업데이트
 module.exports = {
-  post: async (req, res) => {
+  patch: async (req, res) => {
     let { id, important, complete, content } = req.body;
 
     let editCom = await Complete.update({
       important: important,
-      complete: complete,
-      content: content
+      complete: complete
     }, {
       where: {
         id: id
-      },
-      include: {
-        model: Todo,
-        where: {
-          id: id
-        }
       }
     });
 
