@@ -64,6 +64,7 @@ module.exports = {
 
     try {
       if (todo && com && join) {
+
         let result = {
           id: todo.dataValues.userId,
           content: todo.dataValues.content,
@@ -78,5 +79,5 @@ module.exports = {
     } catch (err) {
       res.sendStatus(500);
     }
-  },
+  }
 }
