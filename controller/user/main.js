@@ -64,12 +64,7 @@ module.exports = {
 
     try {
       if (todo && com && join) {
-        //   {
-        //     "id": "User.id", 
-        //     "content": "Todo.content", 
-        //     "startDate": "Todo.startDate", 
-        //     "important": "Complete.important"
-        // }  
+
         let result = {
           id: todo.dataValues.userId,
           content: todo.dataValues.content,
