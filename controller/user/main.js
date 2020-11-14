@@ -1,4 +1,4 @@
-const { Todo, User, Complete } = require('../../models');
+const { Todo, User, Complete , JoinTable} = require('../../models');
 const session = require('express-session');
 
 module.exports = {
@@ -46,19 +46,40 @@ module.exports = {
     // 조인하지 않고 각 테이블에 findOrCreate
     let { userId, content, startDate, important, complete, deleteId } = req.body;
 
-    let todo = await Todo.findOrCreate({
-      where: { userId, content, startDate },
-      default: { userId, content, startDate }
+    let todo = await Todo.create({
+      userId : userId,
+      content : content,
+      startDate: startDate
     });
-    let com = await Complete.findOrCreate({
-      where: { important, complete, deleteId },
-      default: { important, complete, deleteId }
+    let com = await Complete.create({
+      important : important,
+      complete, complete,
+      deleteId : deleteId
+    });
+
+    let join = await JoinTable.create({
+      todoId : todo.dataValues.id,
+      completeId : com.dataValues.id
     });
 
     try {
-      if (todo && com) {
-        console.log(todo);
-        console.log(com);
+      if (todo && com && join) {   
+      //   {
+      //     "id": "User.id", 
+      //     "content": "Todo.content", 
+      //     "startDate": "Todo.startDate", 
+      //     "important": "Complete.important"
+      // }  
+      let result = {
+        id: todo.dataValues.userId,
+        content : todo.dataValues.content,
+        startDate: todo.dataValues.startDate,
+        important: com.dataValues.important,
+        complete : com.dataValues.complete
+      }
+
+      res.status(201).json(result);
+        
       }
     } catch (err) {
       res.sendStatus(500);
