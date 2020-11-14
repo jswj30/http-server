@@ -5,13 +5,12 @@ module.exports = {
   get: async (req, res) => {
     let result = [];
     let todoList = await Todo.findAll({
-      where: { userId: 1 },
+      where: { userId: 3 }, // 추후에 req.session.userid 변경
       attributes: ['content', 'startDate'],
       include: [
         {
           model: User,
-          attributes: ['name'],
-          where: { id: 1 }
+          attributes: ['name']
         },
         {
           model: Complete,
@@ -22,7 +21,7 @@ module.exports = {
 
     for (let i = 0; i < todoList.length; i++) {
       result.push({
-        id: 1, // 추후에 req.session.userid 변경
+        id: 3, // 추후에 req.session.userid 변경
         name: todoList[i].dataValues.User.dataValues.name,
         content: todoList[i].dataValues.content,
         startDate: todoList[i].dataValues.startDate,
@@ -35,6 +34,7 @@ module.exports = {
       if (!result.length) {
         res.status(404).json('아직도 시간보낼게 없어?');
       } else {
+        console.log(todoList[0]);
         res.status(200).json(result);
       }
     } catch (err) {
@@ -44,17 +44,17 @@ module.exports = {
 
   post: async (req, res) => {
     // 조인하지 않고 각 테이블에 findOrCreate
-    let { userId, content, startDate, important, complete, deleteId } = req.body;
+    let { content, startDate, important } = req.body;
 
     let todo = await Todo.create({
-      userId: userId,
+      userId: 3,
       content: content,
       startDate: startDate
     });
     let com = await Complete.create({
       important: important,
-      complete, complete,
-      deleteId: deleteId
+      complete: false,
+      deleteId: false
     });
 
     let join = await JoinTable.create({
@@ -66,17 +66,70 @@ module.exports = {
       if (todo && com && join) {
 
         let result = {
-          id: todo.dataValues.userId,
+          userId: todo.dataValues.userId,
+          todoId: todo.dataValues.id,
           content: todo.dataValues.content,
           startDate: todo.dataValues.startDate,
           important: com.dataValues.important,
           complete: com.dataValues.complete
         }
-
+        console.log(result);
         res.status(201).json(result);
 
       }
     } catch (err) {
+      res.sendStatus(500);
+    }
+  },
+  patch: async (req, res) => {
+    let { id, important, complete, content } = req.body;
+
+    let editCom = await Complete.update({
+      important: important,
+      complete: complete
+    }, {
+      where: {
+        id: id
+      }
+    });
+
+    let editTodo = await Todo.update({
+      content: content
+    }, {
+      where: {
+        id: id
+      }
+    });
+
+    let find = await Complete.findOne({
+      attributes: ['id', 'important', 'complete'],
+      where: {
+        id: id,
+        important: important,
+        complete: complete
+      },
+      include: {
+        model: Todo,
+        attributes: ['content']
+      }
+    })
+
+    let result = {
+      id: find.dataValues.id,
+      important: find.dataValues.important,
+      complete: find.dataValues.complete,
+      content: find.Todos[0].content
+    };
+
+    try {
+      if (editCom && editTodo) {
+        console.log(result);
+        res.status(200).json(result);
+      } else {
+        res.status(404).send("error");
+      }
+    }
+    catch {
       res.sendStatus(500);
     }
   }

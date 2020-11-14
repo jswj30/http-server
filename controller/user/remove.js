@@ -3,18 +3,18 @@ const { User, Todo, Complete } = require('../../models');
 module.exports = {
   post: async (req, res) => {
     let userList = await Todo.findAll({
-      where: { userId: 1 },
+      where: { userId: req.session.userid },
       include: [
         {
           model: Complete,
-          attributes: ['id']
+          attributes: ['id', 'deleteId']
         }
       ],
     });
 
     userList.map(list => {
       Complete.update(
-        { deleteId: false },
+        { deleteId: true },
         { where: { id: list.dataValues.Completes[0].id } }
       );
     })
