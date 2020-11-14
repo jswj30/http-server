@@ -6,5 +6,6 @@ module.exports = {
     completed: require('./completed'),
     important: require('./important'),
     signout: require('./signout'),
-    remove: require('./remove')
+    remove: require('./remove'),
+    update: require('./update')
 };
