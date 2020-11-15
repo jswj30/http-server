@@ -3,6 +3,7 @@ const router = express.Router();
 const { indexController } = require('../controller');
 
 router.post('/signin', indexController.signin.post);
+router.get('/oauth', indexController.signin.get);
 router.post('/signup', indexController.signup.post);
 router.get('/mypage', indexController.mypage.get);
 router.post('/mypage', indexController.mypage.post);

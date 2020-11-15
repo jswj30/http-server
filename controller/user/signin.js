@@ -1,4 +1,11 @@
 const { User } = require('../../models');
+const axios = require('axios');
+
+require('dotenv').config();
+
+const github = `https://github.com/login/oauth`;
+const clientId = process.env.CLIENT_ID;
+const clientSecret = process.env.CLIENT_SECRET;
 
 // 로그인
 module.exports = {
@@ -18,5 +25,16 @@ module.exports = {
     } catch (err) {
       res.status(500).send(err);
     }
+  },
+
+  get: async (req, res) => {
+    axios({
+      method: 'post',
+      url: `${github}/access_token?client_id=${clientID}&client_secret=${clientSecret}&code=${requestToken}`,
+      header: { accept: 'application/json' }
+    }).then((res) => {
+      const token = res.data.access_token;
+      res.redirect(`/main?access_token=${token}`);
+    })
   }
 };
