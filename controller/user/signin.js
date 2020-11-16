@@ -28,13 +28,51 @@ module.exports = {
   },
 
   get: async (req, res) => {
-    axios({
+    const requestToken = req.query.code;
+    let result = await axios({
       method: 'post',
-      url: `${github}/access_token?client_id=${clientID}&client_secret=${clientSecret}&code=${requestToken}`,
+      url: `${github}/access_token?client_id=${clientId}&client_secret=${clientSecret}&code=${requestToken}`,
       header: { accept: 'application/json' }
-    }).then((res) => {
-      const token = res.data.access_token;
-      res.redirect(`/main?access_token=${token}`);
     })
+
+    try {
+      console.dir(result.data);
+      const token = result.data.access_token;
+
+      let userInfo = await axios({
+        method: 'get',
+        url: 'https://api.github.com/user',
+        header: { Authorization: 'token ' + token }
+      })
+      userInfo = JSON.stringify(userInfo);
+
+      const userData = await User
+        .findOrCreate({
+          where: { email: userInfo.email },
+          default: { name: userInfo.name }
+        });
+
+      // let [user, created] = userData;
+      // if (created) {
+      //   res.status(201).json(user);
+      // } else {
+      //   User.findOne({
+      //     where: {
+      //       email: userInfo.email
+      //     }
+      //   })
+      //     .then((result) => {
+      //       res.status(200).json(result);
+      //     })
+      //     .catch(err => {
+      //       res.sendStatus(404);
+      //     })
+      // }
+
+      res.redirect(`/main?access_token=${token}`);
+    }
+    catch {
+      res.sendStatus(500);
+    }
   }
 };
