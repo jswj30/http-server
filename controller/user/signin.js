@@ -1,5 +1,6 @@
 const { User } = require('../../models');
 const axios = require('axios');
+const user = require('.');
 
 require('dotenv').config();
 
@@ -41,7 +42,7 @@ module.exports = {
       } else {
         // 쿠키 전달
         sess.userid = findUser.id;
-        res.status(200).json({ id: sess.userid });
+        res.status(200).json(findUser);
       }
     } catch (err) {
       res.status(500).send(err);
@@ -59,11 +60,23 @@ module.exports = {
     const userInfo = await getUserInfo(token);
 
     //userInfo 바탕으로 DB에 정보 저장
-    const { login } = userInfo;
+    const { login, email, name } = userInfo;
+
+    // let userInfo = {
+    //   login: getInfo.data.login,
+    //   email: getInfo.data.email === null ? `${getInfo.data.login}@github.com` : getInfo.data.email,
+    //   name: getInfo.data.name === null ? getInfo.data.login : getInfo.data.name
+    // }
     try {
       const userData = await User.findOrCreate({
-        where: { name: login },
-        default: { name: login }
+        where: {
+          name: name === null ? login : name,
+          email: email === null ? `${login}@github.com` : email
+        },
+        default: {
+          name: name === null ? login : name,
+          email: email === null ? `${login}@github.com` : email
+        }
       });
 
       if (userData) {
@@ -72,14 +85,20 @@ module.exports = {
         if (created) {
           let sess = req.session;
           sess.userid = findUser.id;
-          res.status(200).json({ id: sess.userid });
-          res.redirect('/main');
+          res.status(201).json(user);
         } else {
-          res.redirect('/main');
+          User.findOne({
+            where: { email: email }
+          })
+            .then(result => {
+              res.status(200).json(result);
+            }).catch(err => {
+              res.status(404).json(err);
+            })
         }
       }
     } catch (err) {
-      res.redirect('/main');
+      res.redirect('/signin');
     }
   }
 };

@@ -5,14 +5,9 @@ module.exports = {
     let dummyTodos = [];
 
     for (let i = 1; i < 10; i++) {
-      let test = false;
-      if (i % 2 === 0) {
-        test = true;
-      }
-
       let todoData = {
         important: true,
-        complete: test,
+        complete: false,
         deleteId: false,
         createdAt: new Date(),
         updatedAt: new Date(),
