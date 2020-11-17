@@ -47,7 +47,7 @@ module.exports = {
     let userInfo = {
       login: getInfo.data.login,
       email: getInfo.data.email === null ? `${getInfo.data.login}@github.com` : getInfo.data.email,
-      name: getInfo.data.name
+      name: getInfo.data.name === null ? getInfo.data.login : getInfo.data.name
     }
     console.dir(userInfo);
 

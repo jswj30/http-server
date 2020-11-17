@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { indexController } = require('../controller');
 
-router.get('/oauth', indexController.signin.get);
+router.get('/callback', indexController.signin.get);
 router.post('/signin', indexController.signin.post);
 router.post('/signup', indexController.signup.post);
 router.get('/mypage', indexController.mypage.get);
