@@ -5,7 +5,7 @@ module.exports = {
   get: async (req, res) => {
     let result = [];
     let todoList = await Todo.findAll({
-      where: { userId: 3 }, // 추후에 req.session.userid 변경
+      where: { userId: req.session.userId }, // 추후에 req.session.userid 변경
       attributes: ['content', 'startDate'],
       include: [
         {
@@ -21,7 +21,7 @@ module.exports = {
 
     for (let i = 0; i < todoList.length; i++) {
       result.push({
-        id: 3, // 추후에 req.session.userid 변경
+        id: req.session.userId, // 추후에 req.session.userid 변경
         name: todoList[i].dataValues.User.dataValues.name,
         content: todoList[i].dataValues.content,
         startDate: todoList[i].dataValues.startDate,
@@ -34,7 +34,6 @@ module.exports = {
       if (!result.length) {
         res.status(404).json('아직도 시간보낼게 없어?');
       } else {
-        console.log(todoList[0]);
         res.status(200).json(result);
       }
     } catch (err) {
