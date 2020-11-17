@@ -8,5 +8,6 @@ module.exports = {
     signout: require('./signout'),
     remove: require('./remove'),
     update: require('./update'),
-    signinMain: require('./signinMain')
+    signinMain: require('./signinMain'),
+    main2: require('./main2')
 };
