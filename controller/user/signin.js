@@ -72,6 +72,7 @@ module.exports = {
         if (created) {
           let sess = req.session;
           sess.userid = findUser.id;
+          res.status(200).json({ id: sess.userid });
           res.redirect('/main');
         } else {
           res.redirect('/main');
