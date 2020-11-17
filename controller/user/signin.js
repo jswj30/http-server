@@ -33,15 +33,16 @@ let getUserInfo = async function (token) {
 module.exports = {
   post: async (req, res) => {
     const { email, password } = req.body;
-    let sess = req.session;
     let findUser = await User.findOne({ where: { email, password } });
-
+    
     try {
       if (findUser === null) {
         res.status(404).send('유저를 찾을 수 없습니다.');
       } else {
         // 쿠키 전달
-        sess.userid = findUser.id;
+        req.session.userid = findUser.id;
+
+	console.log(req.session.userid);
         res.status(200).json(findUser);
       }
     } catch (err) {

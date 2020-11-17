@@ -4,8 +4,9 @@ const session = require('express-session');
 module.exports = {
   get: async (req, res) => {
     let result = [];
+	  console.log('ID 받았니??? : ', req.session );
     let todoList = await Todo.findAll({
-      where: { userId: req.session.userId }, // 추후에 req.session.userid 변경
+	    where: { userId: req.session.userid }, // 추후에 req.session.userid 변경
       attributes: ['content', 'startDate'],
       include: [
         {
@@ -19,6 +20,8 @@ module.exports = {
       ]
     });
 
+	  console.log('여기까지 안온다 ㅎㅎ');
+
     for (let i = 0; i < todoList.length; i++) {
       result.push({
         id: req.session.userid, // 추후에 req.session.userid 변경
@@ -31,6 +34,7 @@ module.exports = {
     }
 
     try {
+	    console.log('try에도 안온다 ㅋㅋㅋㅋㅋㅋㅋㅋ');
       if (!result.length) {
         res.status(404).json('아직도 시간보낼게 없어?');
       } else {
@@ -46,7 +50,7 @@ module.exports = {
     let { content, startDate, important } = req.body;
 
     let todo = await Todo.create({
-      userId: 3,
+      userId: req.session.userid,
       content: content,
       startDate: startDate
     });
