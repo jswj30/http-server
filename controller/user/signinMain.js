@@ -79,7 +79,7 @@ module.exports = {
       if (!result.length) {
         res.status(404).json('아직도 시간보낼게 없어?');
       } else {
-        res.status(200).json(result);
+        res.status(200).json({id: req.session.userid, email: email, todo:result});
       }
     } catch (err) {
       res.status(500).send(err);
