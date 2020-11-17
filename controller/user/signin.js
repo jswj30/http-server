@@ -3,8 +3,7 @@ const axios = require('axios');
 
 require('dotenv').config();
 
-const github = `https://github.com/login/oauth`;
-const clientId = process.env.CLIENT_ID;
+const clientID = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 
 // 로그인
@@ -31,45 +30,60 @@ module.exports = {
     const requestToken = req.query.code;
     let result = await axios({
       method: 'post',
-      url: `${github}/access_token?client_id=${clientId}&client_secret=${clientSecret}&code=${requestToken}`,
-      header: { accept: 'application/json' }
+      url: `https://github.com/login/oauth/access_token?client_id=${clientID}&client_secret=${clientSecret}&code=${requestToken}`,
+      headers: {
+        accept: 'application/json'
+      }
     })
+    // console.dir(result.data);
+    const token = result.data.access_token;
+
+    let getInfo = await axios({
+      method: 'get',
+      url: 'https://api.github.com/user',
+      headers: { Authorization: `token ${token}` }
+    });
+    // userInfo = JSON.stringify(userInfo);
+    let userInfo = {
+      login: getInfo.data.login,
+      email: getInfo.data.email === null ? `${getInfo.data.login}@github.com` : getInfo.data.email,
+      name: getInfo.data.name
+    }
+    console.dir(userInfo);
+
+    const userData = await User
+      .findOrCreate({
+        where: {
+          email: userInfo.email,
+          name: userInfo.name
+        },
+        default: {
+          email: userInfo.email,
+          name: userInfo.name
+        }
+      });
+    let [user, created] = userData;
 
     try {
-      console.dir(result.data);
-      const token = result.data.access_token;
+      if (created) {
+        req.session.userid = user.id;
+        res.status(201).json(user);
+      } else {
+        User.findOne({
+          where: {
+            email: userInfo.email
+          }
+        })
+          .then((result) => {
+            req.session.userid = user.id;
+            res.status(200).json(result);
+          })
+          .catch(err => {
+            res.sendStatus(404);
+          })
+      }
 
-      let userInfo = await axios({
-        method: 'get',
-        url: 'https://api.github.com/user',
-        header: { Authorization: 'token ' + token }
-      })
-      userInfo = JSON.stringify(userInfo);
-
-      const userData = await User
-        .findOrCreate({
-          where: { email: userInfo.email },
-          default: { name: userInfo.name }
-        });
-
-      // let [user, created] = userData;
-      // if (created) {
-      //   res.status(201).json(user);
-      // } else {
-      //   User.findOne({
-      //     where: {
-      //       email: userInfo.email
-      //     }
-      //   })
-      //     .then((result) => {
-      //       res.status(200).json(result);
-      //     })
-      //     .catch(err => {
-      //       res.sendStatus(404);
-      //     })
-      // }
-
-      res.redirect(`/main?access_token=${token}`);
+      // res.redirect(`/main?access_token=${token}`);
     }
     catch {
       res.sendStatus(500);

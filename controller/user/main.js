@@ -5,7 +5,7 @@ module.exports = {
   get: async (req, res) => {
     let result = [];
     let todoList = await Todo.findAll({
-      where: { userId: 3 }, // 추후에 req.session.userid 변경
+      where: { userId: 1 }, // 추후에 req.session.userid 변경
       attributes: ['content', 'startDate'],
       include: [
         {
@@ -21,7 +21,7 @@ module.exports = {
 
     for (let i = 0; i < todoList.length; i++) {
       result.push({
-        id: 3, // 추후에 req.session.userid 변경
+        id: 1, // 추후에 req.session.userid 변경
         name: todoList[i].dataValues.User.dataValues.name,
         content: todoList[i].dataValues.content,
         startDate: todoList[i].dataValues.startDate,
