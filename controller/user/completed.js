@@ -3,10 +3,10 @@ const sesseion = require('express-session');
 
 module.exports = {
   get: async (req, res) => {
-    if (req.express.userid) {
+    if (req.sesseion.userid) {
       let findTodo = await Todo.findAll({
         where: {
-          userId: req.express.userid
+          userId: req.sesseion.userid
         },
         attributes: ['id', 'startDate', 'content'],
         include: [{
