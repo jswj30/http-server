@@ -7,5 +7,6 @@ module.exports = {
     important: require('./important'),
     signout: require('./signout'),
     remove: require('./remove'),
-    update: require('./update')
+    update: require('./update'),
+    signinMain: require('./signinMain')
 };
