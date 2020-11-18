@@ -1,12 +1,17 @@
 const { Todo, User, Complete, JoinTable } = require('../../models');
 const session = require('express-session');
-
+const jwt = require('jsonwebtoken');
+const jwtKey = process.env.JWT_SECRET;
+let test = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIxQGdtYWlsLmNvbSIsImlkIjoxLCJpYXQiOjE2MDU2Njg0NjIsImV4cCI6MTYwNTY2OTA2Mn0.T7tyFy2LUveWS7bwrM4dAZp2nUXxubJgFNGqqt_JsSM';
 module.exports = {
   get: async (req, res) => {
     let result = [];
-    console.log('ID 받았니??? : ', req.session);
+    //console.log('토큰토큰토큰토큰 : ', req.cookies);
+    let decode = jwt.verify(test, jwtKey);
+    console.log('이거디아기어어!!', decode.id);
+
     let todoList = await Todo.findAll({
-      where: { userId: req.session.userid }, // 추후에 req.session.userid 변경
+      where: { userId: decode.id }, // 추후에 req.session.userid 변경
       attributes: ['content', 'startDate'],
       include: [
         {
@@ -20,8 +25,6 @@ module.exports = {
       ]
     });
 
-    console.log('여기까지 안온다 ㅎㅎ');
-
     for (let i = 0; i < todoList.length; i++) {
       result.push({
         id: req.session.userid, // 추후에 req.session.userid 변경
@@ -34,7 +37,6 @@ module.exports = {
     }
 
     try {
-      console.log('try에도 안온다 ㅋㅋㅋㅋㅋㅋㅋㅋ');
       if (!result.length) {
         res.status(404).json('아직도 시간보낼게 없어?');
       } else {
@@ -48,7 +50,7 @@ module.exports = {
   post: async (req, res) => {
     // 조인하지 않고 각 테이블에 findOrCreate
     let { content, startDate, important } = req.body;
-	console.log('Todo 이 아이디로 만든다 짜식아!! ',req.session.userid);
+
     let todo = await Todo.create({
       userId: req.session.userid,
       content: content,
