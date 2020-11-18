@@ -13,11 +13,11 @@ const indexRouter = require('./routes/index');
 const searchRouter = require('./routes/search');
 
 // 미들웨어 사용
-app.use(session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: true
-}))
+// app.use(session({
+//     secret: 'keyboard cat',
+//     resave: false,
+//     saveUninitialized: true
+// }))
 
 app.use('/', indexRouter);
 app.use('/searchinfo', searchRouter);

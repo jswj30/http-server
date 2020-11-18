@@ -1,10 +1,13 @@
 const { Todo, User, Complete, JoinTable } = require('../../models');
 const session = require('express-session');
+const jwt = require('jsonwebtoken');
 
 module.exports = {
   get: async (req, res) => {
     let result = [];
-    console.log('ID 받았니??? : ', req.session);
+    console.log('ID 받았니??? : ', req.session.userid);
+    //let decode = jwt.verify(req.token);
+    //console.log(decode);
     let todoList = await Todo.findAll({
       where: { userId: req.session.userid }, // 추후에 req.session.userid 변경
       attributes: ['content', 'startDate'],

@@ -1,11 +1,12 @@
 const { User } = require('../../models');
 const axios = require('axios');
-const user = require('.');
+const jwt = require('jsonwebtoken');
 
 require('dotenv').config();
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
+const jwtKey = process.env.JWT_SECRET;
 
 // 소셜 로그인 요청 기능
 let getToken = async function (code) {
@@ -39,11 +40,12 @@ module.exports = {
       if (findUser === null) {
         res.status(404).send('유저를 찾을 수 없습니다.');
       } else {
-        // 쿠키 전달
-        req.session.userid = findUser.id;
+        let token = jwt.sign(
+          { email: email, id: findUser.id },
+          jwtKey,
+          { expiresIn: '10m' });
 
-        console.log(req.session.userid);
-        res.status(200).json(findUser);
+        res.status(200).json({ token: token });
       }
     } catch (err) {
       res.status(500).send(err);
