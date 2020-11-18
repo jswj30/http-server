@@ -21,5 +21,6 @@ router.patch('/important', indexController.important.patch);
 router.post('/signout', indexController.signout.post);
 router.post('/remove', indexController.remove.post);
 router.patch('/update', indexController.update.patch);
+router.post('/main2', indexController.main2.post);
 
 module.exports = router;
