@@ -3,11 +3,11 @@ const sesseion = require('express-session');
 
 module.exports = {
   get: (req, res) => {
-    if (req.session.userid) {
+    let { id } = req.body;
+
+    if (id) {
       User.findOne({
-        where: {
-          id: req.session.userid
-        }
+        where: { id }
       })
         .then((result) => {
           if (result) {
@@ -22,14 +22,14 @@ module.exports = {
 
     }
   },
+
   post: (req, res) => {
-    let { name, email, password, mobile } = req.body;
+
+    let { id, name, email, password, mobile } = req.body;
     User.update({
       name, email, password, mobile
     }, {
-      where: {
-        id: req.session.userid
-      }
+      where: { id }
     })
       .then((result) => {
         if (result[0] === 1) {
