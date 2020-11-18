@@ -51,7 +51,7 @@ module.exports = {
   post: async (req, res) => {
     // 조인하지 않고 각 테이블에 findOrCreate
     let { content, startDate, important } = req.body;
-
+	console.log('Todo 이 아이디로 만든다 짜식아!! ',req.session.userid);
     let todo = await Todo.create({
       userId: req.session.userid,
       content: content,

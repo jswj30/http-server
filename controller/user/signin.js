@@ -37,6 +37,7 @@ module.exports = {
     let findUser = await User.findOne({ where: { email, password } });
 
     try {
+<<<<<<< HEAD
       if (findUser === null) {
         res.status(404).send('유저를 찾을 수 없습니다.');
       } else {
@@ -46,6 +47,15 @@ module.exports = {
           { expiresIn: '10m' });
 
         res.status(200).json({ token: token });
+=======
+      if (findUser) {
+	      req.session.userid = findUser.id;
+	      res.status(200).json({id : findUser.id, email : findUser.email, name: findUser.name}); 
+        
+      } else if(findUser === null) {
+        // 쿠키 전달
+             res.status(404).send('유저를 찾을 수 없습니다');
+>>>>>>> 9f6fcbc84b5ee6ce776819c3b46c7bda543287d4
       }
     } catch (err) {
       res.status(500).send(err);
@@ -94,7 +104,7 @@ module.exports = {
             where: { email: email }
           })
             .then(result => {
-              res.status(200).json(result);
+              res.redirect('/main');
             }).catch(err => {
               res.status(404).json(err);
             })

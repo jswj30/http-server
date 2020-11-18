@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const { indexController } = require('../controller');
+const cors = require('cors');
+
 
 router.post('/signinMain', indexController.signinMain.post);
 router.post('/signin', indexController.signin.post);
-//router.get('/oauth', indexController.signin.get);
 router.get('/github', indexController.signin.github);
 router.get('/githubLogin', indexController.signin.githubLogin);
 router.post('/signup', indexController.signup.post);
@@ -20,5 +21,6 @@ router.patch('/important', indexController.important.patch);
 router.post('/signout', indexController.signout.post);
 router.post('/remove', indexController.remove.post);
 router.patch('/update', indexController.update.patch);
+router.post('/main2', indexController.main2.post);
 
 module.exports = router;
