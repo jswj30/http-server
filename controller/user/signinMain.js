@@ -36,13 +36,13 @@ module.exports = {
     const { email, password } = req.body;
     let findUser = await User.findOne({ where: { email, password } });
 
-    if (findUser === null) {
-      res.status(404).send('유저를 찾을 수 없습니다.');
-    } else {
+    if (findUser) {
+	    req.session.userid = findUser.id;
+
+    } else if(findUser === null) {
       // 쿠키 전달
-      req.session.userid = findUser.id;
+      res.status(404).send('유저를 찾을 수 없습니다.');
       // 나타나라 세션세션!!!!
-      console.log(req.session.userid);
     }
 
     //세션 전체 확인!!!!!!
@@ -66,7 +66,7 @@ module.exports = {
     let result = [];
     for (let i = 0; i < todoList.length; i++) {
       result.push({
-        id: req.session.userid,
+        id: todoList[i].dataValues.userId,
         name: todoList[i].dataValues.User.dataValues.name,
         content: todoList[i].dataValues.content,
         startDate: todoList[i].dataValues.startDate,

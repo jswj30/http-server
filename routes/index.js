@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const { indexController } = require('../controller');
+const cors = require('cors');
+
 
 router.post('/signinMain', indexController.signinMain.post);
 router.post('/signin', indexController.signin.post);
-//router.get('/oauth', indexController.signin.get);
 router.get('/github', indexController.signin.github);
 router.get('/githubLogin', indexController.signin.githubLogin);
 router.post('/signup', indexController.signup.post);

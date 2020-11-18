@@ -36,14 +36,13 @@ module.exports = {
     let findUser = await User.findOne({ where: { email, password } });
 
     try {
-      if (findUser === null) {
-        res.status(404).send('유저를 찾을 수 없습니다.');
-      } else {
+      if (findUser) {
+	      req.session.userid = findUser.id;
+	      res.status(200).json({id : findUser.id, email : findUser.email, name: findUser.name}); 
+        
+      } else if(findUser === null) {
         // 쿠키 전달
-        req.session.userid = findUser.id;
-
-        console.log(req.session.userid);
-        res.status(200).json(findUser);
+             res.status(404).send('유저를 찾을 수 없습니다');
       }
     } catch (err) {
       res.status(500).send(err);
@@ -92,7 +91,7 @@ module.exports = {
             where: { email: email }
           })
             .then(result => {
-              res.status(200).json(result);
+              res.redirect('/main');
             }).catch(err => {
               res.status(404).json(err);
             })
