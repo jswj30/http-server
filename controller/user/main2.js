@@ -24,11 +24,17 @@ module.exports = {
     let result = [];
     for (let i = 0; i < todoList.length; i++) {
       result.push({
+<<<<<<< HEAD
         id: todoList[i].dataValues.userId,
         name: todoList[i].dataValues.User.dataValues.name,
         email: todoList[i].dataValues.User.dataValues.email,
         email: todoList[i].dataValues.User.dataValues.email,
         email: todoList[i].dataValues.User.dataValues.email,
+=======
+        id: todoList[i].dataValues.id,
+        name: todoList[i].dataValues.User.dataValues.name,
+        email: todoList[i].dataValues.User.dataValues.email,
+>>>>>>> 8a77e186b2685891e618a1f2e671f9b5ffeb9447
         content: todoList[i].dataValues.content,
         startDate: todoList[i].dataValues.startDate,
         important: todoList[i].dataValues.Completes[0].dataValues.important,
