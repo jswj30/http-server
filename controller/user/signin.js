@@ -88,8 +88,8 @@ module.exports = {
         const [user, created] = userData;
 
         if (created) {
-          let sess = req.session;
-          sess.userid = findUser.id;
+          // let sess = req.session;
+          // sess.userid = findUser.id;
           res.status(201).json(user);
         } else {
           User.findOne({
