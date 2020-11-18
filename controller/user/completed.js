@@ -2,11 +2,13 @@ const { Todo, User, Complete } = require('../../models');
 const sesseion = require('express-session');
 
 module.exports = {
-  get: async (req, res) => {
-    if (req.sesseion.userid) {
+  post: async (req, res) => {
+    let { id } = req.body;
+
+    if (id) {
       let findTodo = await Todo.findAll({
         where: {
-          userId: req.sesseion.userid
+          userId: id
         },
         attributes: ['id', 'startDate', 'content'],
         include: [{
@@ -43,9 +45,9 @@ module.exports = {
       catch {
         res.status(500).send(err);
       }
-
     }
   },
+
   patch: async (req, res) => {
     let { id, important, complete, content } = req.body;
 

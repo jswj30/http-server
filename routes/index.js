@@ -3,24 +3,22 @@ const router = express.Router();
 const { indexController } = require('../controller');
 const cors = require('cors');
 
-
-router.post('/signinMain', indexController.signinMain.post);
-router.post('/signin', indexController.signin.post);
-router.get('/github', indexController.signin.github);
-router.get('/githubLogin', indexController.signin.githubLogin);
+router.get('/editMain', indexController.main.get);
+router.patch('/editMain', indexController.main.patch);
+router.post('/getMain', indexController.main2.post);
 router.post('/signup', indexController.signup.post);
-router.get('/mypage', indexController.mypage.get);
-router.post('/mypage', indexController.mypage.post);
-router.get('/main', indexController.main.get);
-router.post('/main', indexController.main.post);
-router.patch('/main', indexController.main.patch);
-router.get('/completed', indexController.completed.get);
+router.post('/getMypage', indexController.mypage.get);
+router.post('/postMypage', indexController.mypage.post);
+router.get('/completed', indexController.completed.post);
 router.patch('/completed', indexController.completed.patch);
-router.get('/important', indexController.important.get);
+router.get('/important', indexController.important.post);
 router.patch('/important', indexController.important.patch);
 router.post('/signout', indexController.signout.post);
 router.post('/remove', indexController.remove.post);
 router.patch('/update', indexController.update.patch);
-router.post('/main2', indexController.main2.post);
+router.get('/github', indexController.signin.github);
+router.get('/githubLogin', indexController.signin.githubLogin);
+router.post('/signin', indexController.signin.post);
+// router.post('/signinMain', indexController.signinMain.post);
 
 module.exports = router;

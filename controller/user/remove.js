@@ -2,8 +2,10 @@ const { User, Todo, Complete } = require('../../models');
 
 module.exports = {
   post: async (req, res) => {
+    let { id, password } = req.body;
+
     let userList = await Todo.findAll({
-      where: { userId: req.session.userid },
+      where: { userId: id },
       include: [
         {
           model: Complete,
@@ -22,11 +24,10 @@ module.exports = {
     // deleteId : true 변경 뒤 destroy
     let result = User.destroy({
       where: {
-        id: req.session.userid,
-        password: req.body.password
+        id: id,
+        password: password
       }
     });
-
 
     if (result) {
       res.status(200).send('없앴어여');
