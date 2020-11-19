@@ -35,6 +35,8 @@ module.exports = {
       });
     }
 
+	  console.log(result);
+
     try {
       if (!result.length) {
         res.status(204).json('아직도 시간보낼게 없어?');
