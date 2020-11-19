@@ -5,21 +5,15 @@ const session = require('express-session');
 const cors = require('cors');
 
 app.use(
-	cors({
-		credentials: true}));
+    cors({
+        credentials: true
+    }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // router
 const indexRouter = require('./routes/index');
 const searchRouter = require('./routes/search');
-
-// 미들웨어 사용
-// app.use(session({
-//     secret: 'keyboard cat',
-//     resave: false,
-//     saveUninitialized: true
-// }))
 
 app.use('/', indexRouter);
 app.use('/searchinfo', searchRouter);
