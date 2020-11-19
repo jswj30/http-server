@@ -38,7 +38,7 @@ module.exports = {
 
     try {
       if (findUser === null) {
-        res.status(204).send('유저를 찾을 수 없습니다.');
+        res.status(404).send('유저를 찾을 수 없습니다.');
       } else {
 
         // let token = jwt.sign(
@@ -47,7 +47,7 @@ module.exports = {
         //   { expiresIn: '10m' });
         // res.cookie('user', token);
 
-        res.status(200).json({ id: findUser.id });
+        res.status(200).json({ id: findUser.id, email : findUser.email, name: findUser.name, mobile: findUser.mobile });
       }
     } catch (err) {
       res.status(500).send(err);
@@ -74,12 +74,8 @@ module.exports = {
     // }
     try {
       const userData = await User.findOrCreate({
-        where: {
-          name: name === null ? login : name,
-          email: email === null ? `${login}@github.com` : email
-        },
-        default: {
-          name: name === null ? login : name,
+        where: { name: login },
+        defaults: {
           email: email === null ? `${login}@github.com` : email
         }
       });
@@ -88,15 +84,13 @@ module.exports = {
         const [user, created] = userData;
 
         if (created) {
-          let sess = req.session;
-          sess.userid = findUser.id;
-          res.status(201).json(user);
+          res.redirect(`http://http-client.s3-website.ap-northeast-2.amazonaws.com?access=true`);
         } else {
           User.findOne({
             where: { email: email }
           })
             .then(result => {
-              res.status(200).json(result);
+              res.redirect(`http://http-client.s3-website.ap-northeast-2.amazonaws.com?access=true`);
             }).catch(err => {
               res.status(404).json(err);
             })

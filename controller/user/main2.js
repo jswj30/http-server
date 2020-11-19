@@ -8,7 +8,7 @@ module.exports = {
 
     let todoList = await Todo.findAll({
       where: { userId: id }, // 추후에 req.session.userid 변경
-      attributes: ['content', 'startDate', 'userId'],
+      attributes: ['id', 'content', 'startDate', 'userId'],
       include: [
         {
           model: User,
@@ -24,7 +24,8 @@ module.exports = {
     let result = [];
     for (let i = 0; i < todoList.length; i++) {
       result.push({
-        id: todoList[i].dataValues.id,
+	userId: todoList[i].dataValues.userId, 
+        todoId: todoList[i].dataValues.id,
         name: todoList[i].dataValues.User.dataValues.name,
         email: todoList[i].dataValues.User.dataValues.email,
         content: todoList[i].dataValues.content,
@@ -36,7 +37,7 @@ module.exports = {
 
     try {
       if (!result.length) {
-        res.status(404).json('아직도 시간보낼게 없어?');
+        res.status(204).json('아직도 시간보낼게 없어?');
       } else {
         res.status(200).json(result);
       }

@@ -14,6 +14,18 @@ module.exports = {
       ],
     });
 
+
+    // deleteId : true 변경 뒤 destroy
+    let result = await User.destroy({
+      where: {
+        id: id,
+        password: password
+      }
+    });
+
+
+
+
     userList.map(list => {
       Complete.update(
         { deleteId: true },
@@ -21,14 +33,7 @@ module.exports = {
       );
     })
 
-    // deleteId : true 변경 뒤 destroy
-    let result = User.destroy({
-      where: {
-        id: id,
-        password: password
-      }
-    });
-
+console.log(result);
     if (result) {
       res.status(200).send('없앴어여');
     } else {
