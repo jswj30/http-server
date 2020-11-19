@@ -24,7 +24,7 @@ module.exports = {
     let result = [];
     for (let i = 0; i < todoList.length; i++) {
       result.push({
-	userId: todoList[i].dataValues.userId, 
+        userId: todoList[i].dataValues.userId,
         todoId: todoList[i].dataValues.id,
         name: todoList[i].dataValues.User.dataValues.name,
         email: todoList[i].dataValues.User.dataValues.email,
