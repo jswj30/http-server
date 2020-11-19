@@ -9,13 +9,13 @@ module.exports = {
       res.status(422).send('다 적어!');
     }
 
-    try {
-      const userData = await User
-        .findOrCreate({
-          where: { name, password, email, mobile },
-          default: { name, password, email, mobile }
-        });
+    const userData = await User
+      .findOrCreate({
+        where: { name, password, email, mobile },
+        defaults: { name, password, email, mobile }
+      });
 
+    try {
       if (userData) {
         const [user, created] = userData;
 
