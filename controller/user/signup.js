@@ -9,14 +9,17 @@ module.exports = {
       res.status(422).send('다 적어!');
     }
 
-    try {
+	  console.log(name, password, email, mobile);
+
+    
       const userData = await User
         .findOrCreate({
-          where: { name, password, email, mobile },
-          default: { name, password, email, mobile }
+		where: {email },
+		defaults: { name:name, password:password, mobile: mobile }
         });
 
-      if (userData) {
+    try{
+	  if (userData) {
         const [user, created] = userData;
 
         if (!created) {
