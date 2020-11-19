@@ -11,8 +11,8 @@ module.exports = {
 
     const userData = await User
       .findOrCreate({
-        where: { name, password, email, mobile },
-        defaults: { name, password, email, mobile }
+        where: { email },
+        defaults: { name, password, mobile }
       });
 
     try {
