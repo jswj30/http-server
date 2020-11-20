@@ -1,4 +1,4 @@
-const { User } = require('../../models');
+const { User, Todo, Complete, JoinTable } = require('../../models');
 
 // 회원 가입
 module.exports = {
@@ -15,35 +15,36 @@ module.exports = {
         defaults: { name: name, password: password, mobile: mobile }
       });
 
-    try {
-      if (userData) {
-        const [user, created] = userData;
 
-        if (!created) {
-          res.status(409).send('이미 존재하는 유저입니다.');
-        } else {
+    if (userData) {
+      const [user, created] = userData;
+      if (!created) {
+        res.status(409).send('이미 존재하는 유저입니다.');
+      } else {
 
-          let todo = await Todo.create({
-            userId: user.id,
-            content: '아직 첫 글이 등록되지 않았습니다.',
-            startDate: new Date()
-          });
-          let com = await Complete.create({
-            important: false,
-            complete: false,
-            deleteId: false
-          });
+        let todo = await Todo.create({
+          userId: user.id,
+          content: '아직 첫 글이 등록되지 않았습니다.',
+          startDate: '2020-01-19 05:30:29'
+        });
+        let com = await Complete.create({
+          important: false,
+          complete: false,
+          deleteId: false
+        });
 
-          let join = await JoinTable.create({
-            todoId: todo.dataValues.id,
-            completeId: com.dataValues.id
-          });
-
-          res.status(201).json(user);
-        }
+        let join = await JoinTable.create({
+          todoId: todo.dataValues.id,
+          completeId: com.dataValues.id
+        });
       }
-    } catch (err) {
-      res.status(500).send(err);
+
+      try {
+        res.status(201).json(user);
+      }
+      catch (err) {
+        res.status(500).send(err);
+      }
     }
   }
-};
+}
