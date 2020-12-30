@@ -8,6 +8,15 @@ app.use(
     cors({
         credentials: true
     }));
+
+app.use(
+    session({
+        secret: 'secretkey',
+        resave: false,
+        saveUninitialized: true
+    })
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
