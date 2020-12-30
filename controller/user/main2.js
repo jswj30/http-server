@@ -1,24 +1,21 @@
-const { Todo, User, Complete, JoinTable } = require('../../models');
-const session = require('express-session');
+const { Todo, User, Complete, JoinTable } = require("../../models");
+const session = require("express-session");
 
 module.exports = {
   post: async (req, res) => {
-    let { id } = req.body;
-    console.log(`id: ${id}`);
-
     let todoList = await Todo.findAll({
-      where: { userId: id }, // 추후에 req.session.userid 변경
-      attributes: ['id', 'content', 'startDate', 'userId'],
+      where: { userId: req.session.userId },
+      attributes: ["id", "content", "startDate", "userId"],
       include: [
         {
           model: User,
-          attributes: ['name', 'email']
+          attributes: ["name", "email"],
         },
         {
           model: Complete,
-          attributes: ['important', 'complete']
-        }
-      ]
+          attributes: ["important", "complete"],
+        },
+      ],
     });
 
     let result = [];
@@ -35,16 +32,16 @@ module.exports = {
       });
     }
 
-	  console.log(result);
+    console.log(result);
 
     try {
       if (!result.length) {
-        res.status(204).json('아직도 시간보낼게 없어?');
+        res.status(204).json("아직도 시간보낼게 없어?");
       } else {
         res.status(200).json(result);
       }
     } catch (err) {
       res.sendStatus(500);
     }
-  }
-}
+  },
+};

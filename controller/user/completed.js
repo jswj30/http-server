@@ -1,27 +1,28 @@
-const { Todo, User, Complete } = require('../../models');
-const sesseion = require('express-session');
+const { Todo, User, Complete } = require("../../models");
+const session = require("express-session");
 
 module.exports = {
-  post: async (req, res) => {
-    let { id } = req.body;
-
-    if (id) {
+  get: async (req, res) => {
+    if (req.session.userId) {
       let findTodo = await Todo.findAll({
         where: {
-          userId: id
+          userId: req.session.userId,
         },
-        attributes: ['id', 'startDate', 'content'],
-        include: [{
-          model: User,
-          attributes: ['name']
-        }, {
-          model: Complete,
-          attributes: ['important', 'complete'],
-          where: {
-            complete: true
-          }
-        }]
-      })
+        attributes: ["id", "startDate", "content"],
+        include: [
+          {
+            model: User,
+            attributes: ["name"],
+          },
+          {
+            model: Complete,
+            attributes: ["important", "complete"],
+            where: {
+              complete: true,
+            },
+          },
+        ],
+      });
 
       let result = [];
       for (let i = 0; i < findTodo.length; i++) {
@@ -31,18 +32,17 @@ module.exports = {
           content: findTodo[i].dataValues.content,
           name: findTodo[i].dataValues.User.dataValues.name,
           important: findTodo[i].dataValues.Completes[0].dataValues.important,
-          complete: findTodo[i].dataValues.Completes[0].dataValues.complete
-        })
+          complete: findTodo[i].dataValues.Completes[0].dataValues.complete,
+        });
       }
 
       try {
         if (findTodo) {
           res.status(200).json(result);
         } else {
-          res.status(404).send('정보를 찾을 수 없습니다.');
+          res.status(404).send("정보를 찾을 수 없습니다.");
         }
-      }
-      catch {
+      } catch {
         res.status(500).send(err);
       }
     }
@@ -51,41 +51,47 @@ module.exports = {
   patch: async (req, res) => {
     let { id, important, complete, content } = req.body;
 
-    let editCom = await Complete.update({
-      important: important,
-      complete: complete
-    }, {
-      where: {
-        id: id
+    let editCom = await Complete.update(
+      {
+        important: important,
+        complete: complete,
+      },
+      {
+        where: {
+          id: id,
+        },
       }
-    });
+    );
 
-    let editTodo = await Todo.update({
-      content: content
-    }, {
-      where: {
-        id: id
+    let editTodo = await Todo.update(
+      {
+        content: content,
+      },
+      {
+        where: {
+          id: id,
+        },
       }
-    });
+    );
 
     let find = await Complete.findOne({
-      attributes: ['id', 'important', 'complete'],
+      attributes: ["id", "important", "complete"],
       where: {
         id: id,
         important: important,
-        complete: complete
+        complete: complete,
       },
       include: {
         model: Todo,
-        attributes: ['content']
-      }
-    })
+        attributes: ["content"],
+      },
+    });
 
     let result = {
       id: find.dataValues.id,
       important: find.dataValues.important,
       complete: find.dataValues.complete,
-      content: find.Todos[0].content
+      content: find.Todos[0].content,
     };
 
     try {
@@ -95,9 +101,8 @@ module.exports = {
       } else {
         res.status(404).send("error");
       }
-    }
-    catch {
+    } catch {
       res.sendStatus(500);
     }
-  }
+  },
 };

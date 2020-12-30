@@ -1,9 +1,9 @@
-const { Todo, User, Complete, JoinTable } = require('../../models');
-const axios = require('axios');
-const user = require('.');
-const session = require('express-session');
+const { Todo, User, Complete, JoinTable } = require("../../models");
+const axios = require("axios");
+const user = require(".");
+const session = require("express-session");
 
-require('dotenv').config();
+require("dotenv").config();
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
@@ -11,24 +11,24 @@ const clientSecret = process.env.CLIENT_SECRET;
 // 소셜 로그인 요청 기능
 let getToken = async function (code) {
   let res = await axios({
-    method: 'POST',
+    method: "POST",
     url: `https://github.com/login/oauth/access_token?client_id=${clientId}&client_secret=${clientSecret}&code=${code}`,
-    headers: { accept: 'application/json' }
+    headers: { accept: "application/json" },
   });
-  console.log('요기는 토큰받는곳', res.data.access_token);
+  console.log("요기는 토큰받는곳", res.data.access_token);
   const access_token = res.data.access_token;
   return access_token;
 };
 
 let getUserInfo = async function (token) {
   let data = await axios({
-    method: 'GET',
-    url: 'https://api.github.com/user',
-    headers: { Authorization: 'token ' + token }
+    method: "GET",
+    url: "https://api.github.com/user",
+    headers: { Authorization: "token " + token },
   });
 
   return data.data;
-}
+};
 
 // 로그인
 module.exports = {
@@ -37,30 +37,29 @@ module.exports = {
     let findUser = await User.findOne({ where: { email, password } });
 
     if (findUser) {
-	    req.session.userid = findUser.id;
-
-    } else if(findUser === null) {
+      req.session.userId = findUser.id;
+    } else if (findUser === null) {
       // 쿠키 전달
-      res.status(404).send('유저를 찾을 수 없습니다.');
+      res.status(404).send("유저를 찾을 수 없습니다.");
       // 나타나라 세션세션!!!!
     }
 
     //세션 전체 확인!!!!!!
-    console.log('세션에 뭐들었니????? : ', req.session);
+    console.log("세션에 뭐들었니????? : ", req.session);
 
     let todoList = await Todo.findAll({
-      where: { userId: req.session.userid },
-      attributes: ['content', 'startDate'],
+      where: { userId: req.session.userId },
+      attributes: ["content", "startDate"],
       include: [
         {
           model: User,
-          attributes: ['name']
+          attributes: ["name"],
         },
         {
           model: Complete,
-          attributes: ['important', 'complete']
-        }
-      ]
+          attributes: ["important", "complete"],
+        },
+      ],
     });
 
     let result = [];
@@ -77,14 +76,14 @@ module.exports = {
 
     try {
       if (!result.length) {
-        res.status(404).json('아직도 시간보낼게 없어?');
+        res.status(404).json("아직도 시간보낼게 없어?");
       } else {
         res.status(200).json({
-		id: req.session.userid,
-		name: result[0].name,
-		email: email,
-		todo:result
-	});
+          id: req.session.userId,
+          name: result[0].name,
+          email: email,
+          todo: result,
+        });
       }
     } catch (err) {
       res.status(500).send(err);
@@ -113,12 +112,12 @@ module.exports = {
       const userData = await User.findOrCreate({
         where: {
           name: name === null ? login : name,
-          email: email === null ? `${login}@github.com` : email
+          email: email === null ? `${login}@github.com` : email,
         },
         default: {
           name: name === null ? login : name,
-          email: email === null ? `${login}@github.com` : email
-        }
+          email: email === null ? `${login}@github.com` : email,
+        },
       });
 
       if (userData) {
@@ -130,17 +129,18 @@ module.exports = {
           res.status(201).json(user);
         } else {
           User.findOne({
-            where: { email: email }
+            where: { email: email },
           })
-            .then(result => {
+            .then((result) => {
               res.status(200).json(result);
-            }).catch(err => {
-              res.status(404).json(err);
             })
+            .catch((err) => {
+              res.status(404).json(err);
+            });
         }
       }
     } catch (err) {
-      res.redirect('/signin');
+      res.redirect("/signin");
     }
-  }
+  },
 };

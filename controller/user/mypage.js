@@ -1,13 +1,11 @@
-const { User } = require('../../models');
-const sesseion = require('express-session');
+const { User } = require("../../models");
+const session = require("express-session");
 
 module.exports = {
   get: (req, res) => {
-    let { id } = req.body;
-
-    if (id) {
+    if (req.session.userId) {
       User.findOne({
-        where: { id }
+        where: { id: req.session.userId },
       })
         .then((result) => {
           if (result) {
@@ -18,19 +16,23 @@ module.exports = {
         })
         .catch((err) => {
           res.status(500).send(err);
-        })
-
+        });
     }
   },
 
   post: (req, res) => {
-
     let { id, name, email, password, mobile } = req.body;
-    User.update({
-      name, email, password, mobile
-    }, {
-      where: { id }
-    })
+    User.update(
+      {
+        name,
+        email,
+        password,
+        mobile,
+      },
+      {
+        where: { id },
+      }
+    )
       .then((result) => {
         if (result[0] === 1) {
           res.status(200).json({
@@ -38,14 +40,14 @@ module.exports = {
             name: name,
             email: email,
             password: password,
-            mobile: mobile
+            mobile: mobile,
           });
         } else {
           res.status(404).send("404 error");
         }
-      }).catch((err) => {
-        res.status(500).send(err);
       })
-
-  }
+      .catch((err) => {
+        res.status(500).send(err);
+      });
+  },
 };
