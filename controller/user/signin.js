@@ -40,14 +40,9 @@ module.exports = {
       if (findUser === null) {
         res.status(404).send('유저를 찾을 수 없습니다.');
       } else {
+        req.session.userId = findUser.id;
 
-        // let token = jwt.sign(
-        //   { email: email, id: findUser.id },
-        //   jwtKey,
-        //   { expiresIn: '10m' });
-        // res.cookie('user', token);
-
-        res.status(200).json({ id: findUser.id, email : findUser.email, name: findUser.name, mobile: findUser.mobile });
+        res.status(200).json({ id: findUser.id, email: findUser.email, name: findUser.name, mobile: findUser.mobile });
       }
     } catch (err) {
       res.status(500).send(err);
